@@ -1,0 +1,31 @@
+---
+    # Third-party-ci ci configuration
+- job:
+    name: linters
+    parent: base
+    description: A simple linter check
+    run: playbooks/linters.yaml
+
+- job:
+    name: atom-specs-stable-centos
+    parent: base
+    description: Atom package specs testing
+    run: playbooks/atom-specs-stable-centos/run.yaml
+    nodeset:
+      nodes:
+        - name: centOS
+          label: dib-centos-7
+
+# CI jobs CI
+- project:
+    name: mhuin/atom-zuul-ci
+    check:
+      jobs:
+        - linters
+
+# test packages on centOS #TODO fedora #TODO atom non-stable
+- project:
+    name: mhuin/atom-gerrit-comments
+    check:
+      jobs:
+        - atom-specs-stable-centos

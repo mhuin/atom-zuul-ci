@@ -1,0 +1,61 @@
+---
+- hosts: all
+  environment:
+    ATOM_CHANNEL: stable
+    DISPLAY: ":99"
+    ATOM_SCRIPT_NAME: atom
+    APM_SCRIPT_NAME: apm
+    NPM_SCRIPT_PATH: "/usr/share/{{ ATOM_SCRIPT_NAME }}/resources/app/apm/node_modules/.bin/npm"
+    PATH: "{{ ansible_env.PATH }}:/usr/share/{{ ATOM_SCRIPT_NAME }}/resources/app/apm/bin"
+
+  tasks:
+    - name: Install dependencies
+      yum:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      with_items:
+        - git
+        - xorg-x11-server-Xvfb
+
+    - name: start Xvfb
+      shell: nohup /usr/bin/Xvfb -- {{ DISPLAY }} -ac -screen 0 1280x1024x16 </dev/null >/dev/null 2>&1 &
+
+    - name: Download Atom stable release
+      yum:
+        state: present
+        name: https://atom.io/download/rpm?channel={{ ATOM_CHANNEL }}
+
+    - name: Display Atom version
+      command: /usr/bin/{{ ATOM_SCRIPT_NAME }} -v
+      register: atom_version
+
+    - debug:
+        msg: {{ atom_version.stdout }}
+
+    - name: Display APM version
+      command: /usr/bin/{{ APM_SCRIPT_NAME }} -v
+      register: apm_version
+
+    - debug:
+        msg: {{ apm_version.stdout }}
+
+    - name: Clean environment
+      command: /usr/bin/{{ APM_SCRIPT_NAME }} clean
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
+
+    - name: Download package dependencies
+      command: /usr/bin/{{ APM_SCRIPT_NAME }} install
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
+
+    - name: Install package dependencies
+      command: /usr/bin/{{ APM_SCRIPT_NAME }} install {{ zuul.project.short_name }}
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
+
+    - name: Run spec tests
+      command: /usr/bin/{{ APM_SCRIPT_NAME }} install {{ zuul.project.short_name }}
+      args:
+        chdir: "{{ zuul.project.src_dir }}"

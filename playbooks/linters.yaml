@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+    - name: Run yamllint
+      shell: find . -name "*.yml" -or -name "*.yaml" | xargs --no-run-if-empty yamllint -d relaxed
+      args:
+        chdir: "src/{{ zuul.project.canonical_name }}"
