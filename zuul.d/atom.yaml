@@ -10,11 +10,11 @@
           label: dib-centos-7
 
 # CI jobs CI
-- project:
-    name: mhuin/atom-zuul-ci
-    check:
-      jobs:
-        - linters
+#- project:
+#    name: mhuin/atom-zuul-ci
+#    check:
+#      jobs:
+#        - linters
 
 # test packages on centOS #TODO fedora #TODO atom non-stable
 - project:
