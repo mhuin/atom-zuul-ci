@@ -1,7 +1,6 @@
 ---
 - job:
     name: linters
-    parent: base
     description: A simple linter check
     run: playbooks/linters.yaml
 
