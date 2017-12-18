@@ -1,10 +1,5 @@
 ---
 - job:
-    name: atom-linters
-    description: A simple linter check
-    run: playbooks/linters.yaml
-
-- job:
     name: atom-specs-stable-centos
     parent: base
     description: Atom package specs testing
@@ -19,7 +14,7 @@
     name: mhuin/atom-zuul-ci
     check:
       jobs:
-        - atom-linters
+        - linters
 
 # test packages on centOS #TODO fedora #TODO atom non-stable
 - project:
