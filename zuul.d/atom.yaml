@@ -1,5 +1,4 @@
 ---
-    # Third-party-ci ci configuration
 - job:
     name: linters
     parent: base
