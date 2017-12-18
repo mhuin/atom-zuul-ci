@@ -1,6 +1,6 @@
 ---
 - job:
-    name: linters
+    name: atom-linters
     description: A simple linter check
     run: playbooks/linters.yaml
 
@@ -19,7 +19,7 @@
     name: mhuin/atom-zuul-ci
     check:
       jobs:
-        - linters
+        - atom-linters
 
 # test packages on centOS #TODO fedora #TODO atom non-stable
 - project:
